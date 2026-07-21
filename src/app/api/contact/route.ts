@@ -41,6 +41,22 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Contact form is disabled.' }, { status: 403 })
     }
 
+    let serviceId: number | undefined
+    if (parsed.data.service) {
+      const serviceMatch = await payload.find({
+        collection: 'services',
+        where: {
+          or: [
+            { slug: { equals: parsed.data.service } },
+            { title: { equals: parsed.data.service } },
+          ],
+        },
+        limit: 1,
+        depth: 0,
+      })
+      if (serviceMatch.docs[0]) serviceId = serviceMatch.docs[0].id as number
+    }
+
     await payload.create({
       collection: 'contact-messages',
       data: {
@@ -49,7 +65,7 @@ export async function POST(request: Request) {
         phone: parsed.data.phone || undefined,
         company: parsed.data.company || undefined,
         subject: parsed.data.subject,
-        service: parsed.data.service || undefined,
+        ...(serviceId ? { service: serviceId } : {}),
         budget: parsed.data.budget || undefined,
         preferredContactMethod: parsed.data.preferredContactMethod,
         message: parsed.data.message,
