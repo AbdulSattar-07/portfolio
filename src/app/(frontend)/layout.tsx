@@ -12,6 +12,9 @@ import { absoluteUrl } from '@/lib/utils'
 
 import './globals.css'
 
+// Payload + Neon free: avoid SSG timeouts on cold DB during `next build`
+export const dynamic = 'force-dynamic'
+
 const syne = Syne({
   subsets: ['latin'],
   variable: '--font-display',
