@@ -33,10 +33,12 @@ const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 const databaseUrl = process.env.DATABASE_URL || ''
+const onVercel = process.env.VERCEL === '1'
 const useSqlite =
-  process.env.USE_SQLITE === 'true' ||
-  databaseUrl.startsWith('file:') ||
-  !databaseUrl
+  !onVercel &&
+  (process.env.USE_SQLITE === 'true' ||
+    databaseUrl.startsWith('file:') ||
+    !databaseUrl)
 
 const plugins = []
 
@@ -101,7 +103,8 @@ export default buildConfig({
     : postgresAdapter({
         pool: {
           connectionString: databaseUrl,
-          max: 5,
+          // Serverless (Vercel): keep pool tiny for Neon/Supabase free
+          max: onVercel ? 1 : 5,
         },
         push: process.env.PAYLOAD_DATABASE_PUSH === 'true',
       }),
