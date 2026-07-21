@@ -1,0 +1,111 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-display: 'Syne', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Manrope', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  --color-ink: #0b0f14;
+  --color-ink-soft: #121821;
+  --color-panel: #161d28;
+  --color-line: #243041;
+  --color-muted: #8b9bb0;
+  --color-cream: #e8eef6;
+  --color-accent: #1ab8a8;
+  --color-accent-deep: #0f8f84;
+  --color-warm: #e8a05c;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-ink text-cream antialiased font-sans;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(26, 184, 168, 0.12), transparent),
+      linear-gradient(rgba(36, 48, 65, 0.35) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(36, 48, 65, 0.35) 1px, transparent 1px);
+    background-size: auto, 64px 64px, 64px 64px;
+    background-attachment: fixed;
+  }
+
+  html.light body {
+    @apply bg-[#f4f7fb] text-[#121821];
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(26, 184, 168, 0.1), transparent),
+      linear-gradient(rgba(18, 24, 33, 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(18, 24, 33, 0.06) 1px, transparent 1px);
+  }
+
+  html.light {
+    --color-ink: #f4f7fb;
+    --color-ink-soft: #e8eef6;
+    --color-panel: #ffffff;
+    --color-line: #d5dee9;
+    --color-muted: #5b6b7f;
+    --color-cream: #121821;
+  }
+
+  ::selection {
+    @apply bg-accent/30 text-cream;
+  }
+
+  a {
+    @apply transition-colors;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-accent;
+  }
+}
+
+@layer utilities {
+  .container-page {
+    @apply mx-auto w-full max-w-6xl px-5 sm:px-8;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .section-pad {
+    @apply py-16 sm:py-24;
+  }
+
+  .fade-up {
+    animation: fade-up 0.7s ease both;
+  }
+
+  .fade-up-delay {
+    animation: fade-up 0.7s ease 0.12s both;
+  }
+
+  .fade-up-delay-2 {
+    animation: fade-up 0.7s ease 0.24s both;
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fade-up,
+  .fade-up-delay,
+  .fade-up-delay-2 {
+    animation: none;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+}
