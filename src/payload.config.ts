@@ -103,8 +103,15 @@ export default buildConfig({
     : postgresAdapter({
         pool: {
           connectionString: databaseUrl,
-          // Serverless (Vercel): keep pool tiny for Neon/Supabase free
+          // Serverless (Vercel) + Neon free: tiny pool, fail fast on cold connect
           max: onVercel ? 1 : 5,
+          connectionTimeoutMillis: onVercel ? 12_000 : 30_000,
+          idleTimeoutMillis: onVercel ? 5_000 : 10_000,
+          ssl: databaseUrl.includes('sslmode=')
+            ? undefined
+            : onVercel
+              ? { rejectUnauthorized: false }
+              : undefined,
         },
         push: process.env.PAYLOAD_DATABASE_PUSH === 'true',
       }),

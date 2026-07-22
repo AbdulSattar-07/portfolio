@@ -14,6 +14,7 @@ import './globals.css'
 
 // Payload + Neon free: avoid SSG timeouts on cold DB during `next build`
 export const dynamic = 'force-dynamic'
+export const maxDuration = 60
 
 const syne = Syne({
   subsets: ['latin'],
